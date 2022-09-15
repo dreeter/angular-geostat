@@ -1,0 +1,14 @@
+<div class="card">
+  <div class="row card-body">
+    <div class="col-{{ parentLength }}">
+      <app-image
+        [imageSize]="card.imageSize"
+        [imageSrc]="card.imagePath"
+      ></app-image>
+    </div>
+    <div class="col-{{ 12 - parentLength }}">
+      <h5 class="card-title">{{ card.title }}</h5>
+      <app-detail-list [items]="card.detailItems"></app-detail-list>
+    </div>
+  </div>
+</div>

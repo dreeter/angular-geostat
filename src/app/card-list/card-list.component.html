@@ -1,0 +1,8 @@
+<div class="row mt-4">
+  <div
+    *ngFor="let card of cardList"
+    [ngClass]="cardList.length > 1 ? 'col-lg-4' : 'col-lg-12'"
+  >
+    <app-card [card]="card" [parentLength]="cardList.length"></app-card>
+  </div>
+</div>

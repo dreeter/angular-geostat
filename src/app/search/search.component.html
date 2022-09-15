@@ -1,0 +1,31 @@
+<form
+  [formGroup]="searchForm"
+  (ngSubmit)="onSubmit(searchForm.controls['location'].value)"
+  class="form-inline mt-3 ms-2"
+  autocomplete="off"
+>
+  <div class="form-group">
+    <input
+      type="text"
+      id="searchInput"
+      class="form-control ms-1"
+      [formControl]="$any(searchForm.controls['location'])"
+      placeholder="City, State"
+      autofocus="true"
+    />
+    <button id="submit-button" type="submit" class="btn btn-success">
+      Search
+    </button>
+    <div
+      class="container-fluid mb-2 mt-3"
+      *ngIf="
+        (!searchForm.controls['location'].valid &&
+          searchForm.controls['location'].touched) ||
+        searchForm.controls['location'].hasError('invalidLocation')
+      "
+    >
+      <p>Search is invalid!</p>
+    </div>
+  </div>
+  <div id="result"></div>
+</form>

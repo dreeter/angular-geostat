@@ -1,0 +1,33 @@
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand ms-3" href="">
+    <app-image
+      [imageSrc]="brandImageURI"
+      [imageAlt]="brandImageAlt"
+    ></app-image>
+    GeoStat
+  </a>
+
+  <ul class="navbar-nav navbar-nav-left-side">
+    <li class="nav-item dropdown me-5 ms-2"></li>
+
+    <li class="nav-item dropdown me-5">
+      <a
+        id="my-locations"
+        class="nav-link dropdown-toggle orange-text"
+        href="#"
+        id="navbarDropdown"
+        role="button"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        My Locations
+      </a>
+      <div
+        id="my-location-items"
+        class="dropdown-menu"
+        aria-labelledby="navbarDropdown"
+      ></div>
+    </li>
+  </ul>
+</nav>
