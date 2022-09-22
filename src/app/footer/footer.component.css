@@ -1,0 +1,16 @@
+div {
+    position: fixed;
+    bottom:0;
+    height: 40px;
+    width: 100%;
+    background-color: rgb(33, 37, 41);
+    text-align: center;
+}
+
+p {
+    color: rgb(255, 255, 255);
+}
+
+a {
+    color: #E67E22;
+}

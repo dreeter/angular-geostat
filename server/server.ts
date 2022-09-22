@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as https from 'https';
 import { IncomingMessage } from 'http';
+import * as fs from 'fs';
 
 const app = express();
 
@@ -43,19 +44,49 @@ function getAPIInfo(url: string) {
   });
 }
 
-app.get('/weather', async (_req, _res) => {
-  //Endpoint for weather information at a city and state
+app.get('/locations', async (_req, _res) => {
+  //Read and send file data of all searchable locations
+  let locations: any = fs.readFileSync(__dirname + '/city-list.json');
 
+  locations = JSON.parse(locations);
+
+  // const response = {
+  //   locations: locations,
+  // };
+
+  _res.send(JSON.stringify(locations));
+});
+
+app.get('/weather', async (_req, _res) => {
   const city: string = String(_req.query.city);
   const state: string = String(_req.query.state);
 
-  console.log('Making API Call:', city, state);
-
-  const apiKey: string = 'API-KEY-GOES-HERE';
+  const apiKey: string = 'APIKEYHERE';
   const weatherURL: string =
     'https://api.openweathermap.org/data/2.5/weather?q=' +
     city +
-    ',' +
+    ',US-' +
+    state +
+    '&appid=' +
+    apiKey +
+    '&units=imperial';
+
+  const weatherInfo: any = (await getAPIInfo(weatherURL)) as any;
+
+  console.dir(weatherInfo);
+
+  _res.send(JSON.stringify(weatherInfo));
+});
+
+app.get('/forecast', async (_req, _res) => {
+  const city: string = String(_req.query.city);
+  const state: string = String(_req.query.state);
+
+  const apiKey: string = 'APIKEYHERE';
+  const weatherURL: string =
+    'https://api.openweathermap.org/data/2.5/forecast?q=' +
+    city +
+    ',US-' +
     state +
     '&appid=' +
     apiKey +

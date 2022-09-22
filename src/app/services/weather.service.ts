@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
+import * as echarts from 'echarts/types/dist/echarts.d';
 import { DetailCard } from 'src/shared/detail-card.model';
 import { DetailItem } from 'src/shared/detail-item.model';
+import { Location } from '../interfaces/Location.interface';
+import { ChartData } from '../interfaces/ForecastData.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -8,24 +11,37 @@ import { DetailItem } from 'src/shared/detail-item.model';
 export class WeatherService {
   constructor() {}
 
-  async searchWeather(city: string, state: string) {
+  async requestWeatherInfo(location: Location): Promise<DetailCard[]> {
     const url =
       'http://localhost:4201/weather?' +
       new URLSearchParams({
-        city: city,
-        state: state,
+        city: location.city,
+        state: location.state,
       });
 
     const response = await fetch(url);
 
-    console.log(response);
+    const weatherInfo: Promise<any> = await response.json();
 
-    const userWeatherInfo: any = await response.json();
-
-    return this.formatWeatherInfo(userWeatherInfo);
+    return this.formatWeatherInfo(weatherInfo);
   }
 
-  formatWeatherInfo(data: any) {
+  async requestForecastInfo(location: Location): Promise<ChartData[]> {
+    const url =
+      'http://localhost:4201/forecast?' +
+      new URLSearchParams({
+        city: location.city,
+        state: location.state,
+      });
+
+    const response = await fetch(url);
+
+    const forecastInfo: any = await response.json();
+
+    return forecastInfo;
+  }
+
+  formatWeatherInfo(data: any): DetailCard[] {
     const detailCards: DetailCard[] = [];
 
     const timeZoneCard = new DetailCard(
@@ -38,7 +54,8 @@ export class WeatherService {
         new DetailItem('Sunset', data.sys.sunset),
       ],
       '../assets/images/location.png',
-      { 'width.px': 50, 'height.px': 50 }
+      50,
+      50
     );
 
     const weatherCard = new DetailCard(
@@ -51,7 +68,8 @@ export class WeatherService {
         new DetailItem('Humidity', data.main.humidity),
       ],
       'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png',
-      { 'width.px': 70, 'height.px': 70 }
+      70,
+      70
     );
 
     const atmosphereCard = new DetailCard(
@@ -64,7 +82,8 @@ export class WeatherService {
         new DetailItem('Cloudiness', data.clouds.all),
       ],
       '../assets/images/barometer.png',
-      { 'width.px': 50, 'height.px': 50 }
+      50,
+      50
     );
 
     detailCards.push(timeZoneCard, weatherCard, atmosphereCard);

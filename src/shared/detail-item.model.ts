@@ -1,9 +1,3 @@
 export class DetailItem {
-  name: string;
-  value: string;
-
-  constructor(name: string, value: string) {
-    this.name = name;
-    this.value = value;
-  }
+  constructor(public name: string, public value: string) {}
 }

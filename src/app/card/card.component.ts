@@ -7,12 +7,10 @@ import { DetailCard } from 'src/shared/detail-card.model';
   styleUrls: ['./card.component.css'],
 })
 export class CardComponent implements OnInit {
-  @Input() card: DetailCard;
+  @Input() card: DetailCard = {} as DetailCard;
   @Input() parentLength: number = 0;
 
-  constructor() {
-    this.card = {} as DetailCard;
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }

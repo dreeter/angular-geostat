@@ -7,11 +7,9 @@ import { DetailCard } from 'src/shared/detail-card.model';
   styleUrls: ['./card-list.component.css'],
 })
 export class CardListComponent implements OnInit {
-  @Input() cardList: DetailCard[];
+  @Input() cardList: DetailCard[] = [];
 
-  constructor() {
-    this.cardList = [];
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }

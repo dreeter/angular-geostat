@@ -7,11 +7,9 @@ import { DetailItem } from 'src/shared/detail-item.model';
   styleUrls: ['./detail-item.component.css'],
 })
 export class DetailItemComponent implements OnInit {
-  @Input() item: DetailItem;
+  @Input() item: DetailItem = {} as DetailItem;
 
-  constructor() {
-    this.item = {} as DetailItem;
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }

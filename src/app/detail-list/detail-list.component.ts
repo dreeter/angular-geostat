@@ -7,11 +7,9 @@ import { DetailItem } from 'src/shared/detail-item.model';
   styleUrls: ['./detail-list.component.css'],
 })
 export class DetailListComponent implements OnInit {
-  @Input() items: DetailItem[];
+  @Input() detailItems: DetailItem[] = [];
 
-  constructor() {
-    this.items = [];
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }

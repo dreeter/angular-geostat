@@ -1,51 +1,73 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
+import { EventEmitter, Injectable, OnInit, Output } from '@angular/core';
 import { DetailCard } from 'src/shared/detail-card.model';
 import { GeologyService } from './geology.service';
 import { WeatherService } from './weather.service';
+import { Location } from '../interfaces/Location.interface';
+import { NavigationEnd, Router } from '@angular/router';
+
+enum SearchMode {
+  WeatherCurrent,
+  Geology,
+  WeatherForecast,
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class SearchService {
-  searchParameter: string;
-
+export class SearchService implements OnInit {
   @Output() weatherSearch: EventEmitter<DetailCard[]> = new EventEmitter();
   @Output() geologySearch: EventEmitter<DetailCard[]> = new EventEmitter();
+  @Output() forecastSearch: EventEmitter<any> = new EventEmitter();
+
+  private currentLocation: Location | undefined = undefined;
+  private searchMode: SearchMode = SearchMode.WeatherCurrent;
 
   constructor(
     private weatherService: WeatherService,
-    private geologyService: GeologyService
+    private geologyService: GeologyService,
+    private router: Router
   ) {
-    this.searchParameter = '';
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        if (event.url === '/location')
+          this.searchMode = SearchMode.WeatherCurrent;
+        if (event.url === '/geology') this.searchMode = SearchMode.Geology;
+        if (event.url === '/forecast')
+          this.searchMode = SearchMode.WeatherForecast;
+
+        if (this.currentLocation) {
+          this.search(this.currentLocation);
+        }
+      }
+    });
   }
 
-  async search(value: string) {
-    console.log(value);
-    const location = value.split(',');
-    const city = location[0];
-    const state = location[1];
+  ngOnInit() {}
 
-    console.log(city, state);
+  async search(location: Location): Promise<void> {
+    this.setCurrentLocation(location);
 
-    const weatherInfo: DetailCard[] = await this.weatherService.searchWeather(
-      city,
-      state
-    );
-
-    this.weatherSearch.emit(weatherInfo);
-
-    const geologyInfo: DetailCard[] = await this.geologyService.searchGeology(
-      '25.7743',
-      '-80.1937'
-    );
-
-    this.geologySearch.emit(geologyInfo);
+    if (this.currentLocation) {
+      switch (this.searchMode) {
+        case SearchMode.WeatherCurrent:
+          const weatherCards: DetailCard[] =
+            await this.weatherService.requestWeatherInfo(this.currentLocation);
+          this.weatherSearch.emit(weatherCards);
+          return;
+        case SearchMode.Geology:
+          const geologyCards: DetailCard[] =
+            await this.geologyService.requestGeologyInfo(this.currentLocation);
+          this.geologySearch.emit(geologyCards);
+          return;
+        case SearchMode.WeatherForecast:
+          const forecastData: any =
+            await this.weatherService.requestForecastInfo(this.currentLocation);
+          this.forecastSearch.emit(forecastData);
+      }
+    }
   }
 
-  //search service can have it's search parameters set by the search component
-  //service will use the WeatherService (fetches weather data)
-  //service will use the GeologyService (fetches geologic data)
-
-  //service will emit events when new data has been fetched - app component or card-list will subscribe to these
-  //events and update their data
+  setCurrentLocation(location: Location): void {
+    if (location) this.currentLocation = location;
+  }
 }

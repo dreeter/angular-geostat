@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Host, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'app-image',
@@ -8,11 +8,14 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ImageComponent implements OnInit {
   @Input() imageSrc: string;
   @Input() imageAlt: string;
-  @Input() imageSize: any;
+  @Input() imageWidth: number;
+  @Input() imageHeight: number;
 
   constructor() {
     this.imageSrc = '';
     this.imageAlt = '';
+    this.imageHeight = 25;
+    this.imageWidth = 25;
   }
 
   ngOnInit(): void {}

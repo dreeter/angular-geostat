@@ -1,4 +1,7 @@
 <hr />
-<ul *ngFor="let item of items" class="no-bullets">
-  <app-detail-item [item]="item"></app-detail-item>
+<ul class="no-bullets">
+  <app-detail-item
+    *ngFor="let detailItem of detailItems"
+    [item]="detailItem"
+  ></app-detail-item>
 </ul>

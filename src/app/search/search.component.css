@@ -1,23 +1,5 @@
-@media (min-width: 769px){
 
-    input {
-        width: 514px !important;
-    }
-
-}
-
-@media (max-width: 768px) {
-
-    input {
-        width: 370px !important;
-    }
-
-}
-
-input {
+.input-group{
+    width: 450px;
     display: inline-flex;
-}
-
-button {
-    vertical-align: bottom;
 }
